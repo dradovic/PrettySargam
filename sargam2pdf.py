@@ -218,7 +218,7 @@ def beatToTex(beat, raga, inCompositionMode):
             print "symbol: " + symbol
             notes = re.findall(NOTE_PATTERN, symbol) # decompose symbol in its notes (= grace notes + main note)
             symbolIsNote = len(notes) > 0
-            if symbolIsNote or symbol == "-":
+            if symbolIsNote or symbol == "-" or symbol == ";":
                 noteCount = noteCount + 1
             t = re.sub(r"({0})".format(SARGAM_PATTERN), r"@\1", symbol) # prefix notes with special char so they can be found in later replaces
             t = re.sub(r"\[(.+?)\]", r"^{\1}", t)
@@ -627,7 +627,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         
     return currentLine
 
-def processFile(txtFilename):	
+def processFile(txtFilename):
     txtFile = open(txtFilename, 'r')
     lines = txtFile.readlines()
     txtFile.close()
