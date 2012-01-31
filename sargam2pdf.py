@@ -66,6 +66,8 @@ ragas = {
     "Durga": Raga([S, R, M, P, D], [D, P, M, R, S]),
     "Jog": Raga([S, G, M, P, n], [n, P, M, G, M, g, S]),
     "Kafi": Raga([S, R, g, M, P, D, n], [n, D, P, M, g, R, S]),
+    "Patdeep": Raga([S, g, M, P, N], [N, D, P, M, g, R, S]),
+    "Todi": Raga([S, r, g, m, d, N], [N, d, P, m, g, r, S]),
     "Yaman": Raga([R, G, m, D, N], [N, D, P, m, G, R, S])
 }
 
