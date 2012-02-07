@@ -30,13 +30,11 @@ class Note:
         self.symbol = symbol
 
 class Raga:
-    def __init__(self, aroha, avroha, exceptions = []):
-        self.aroha = aroha
-        self.avroha = avroha
-        self.exceptions = exceptions
-    def contains(self, symbol):
+    def __init__(self, allowedNotes):
+        self.allowedNotes = allowedNotes
+    def isAllowed(self, symbol):
         s = symbol[0] # strip away octave specifier
-        for note in self.aroha + self.avroha + self.exceptions:
+        for note in self.allowedNotes:
             if note.symbol == s:
                 return True
         return False
@@ -55,20 +53,22 @@ n = Note("n")
 N = Note("N")
 
 ragas = {
-    "Bageshri": Raga([S, g, M, D, n], [n, D, M, P, D, M, g, R, S]),
-    "Bhairav": Raga([S, r, G, M, P, d, N], [N, d, P, M, G, r, S]),
-    "Bhairavi": Raga([S, r, g, M, P, d, n], [n, d, P, M, g, r, S], [R]),
-    "Bhimpalasi": Raga([S, g, M, P, n], [n, D, P, M, g, R, S]),
-    "Bhupali": Raga([S, R, G, P, D], [D, P, G, R, S]),
-    "Bihag": Raga([S, G, M, P, N], [N, D, P, m, P, G, M, G, R, S]),
-    "Brindabani Sarang": Raga([S, R, M, P, N], [n, P, M, R, S]),
-    "Desh": Raga([S, R, M, P, N], [n, D, P, M, G, R, S]),
-    "Durga": Raga([S, R, M, P, D], [D, P, M, R, S]),
-    "Jog": Raga([S, G, M, P, n], [n, P, M, G, M, g, S]),
-    "Kafi": Raga([S, R, g, M, P, D, n], [n, D, P, M, g, R, S]),
-    "Patdeep": Raga([S, g, M, P, N], [N, D, P, M, g, R, S]),
-    "Todi": Raga([S, r, g, m, d, N], [N, d, P, m, g, r, S]),
-    "Yaman": Raga([R, G, m, D, N], [N, D, P, m, G, R, S])
+    "Bageshri": Raga([S, R, g, M, P, D, n]),
+    "Bhairav": Raga([S, r, G, M, P, d, N]),
+    "Bhairavi": Raga([S, r, R, g, M, P, d, n]),
+    "Bhimpalasi": Raga([S, R, g, M, P, D, n]),
+    "Bhupali": Raga([S, R, G, P, D]),
+    "Bihag": Raga([S, R, G, M, m, P, D, N]),
+    "Brindabani Sarang": Raga([S, R, M, P, N, n]),
+    "Desh": Raga([S, R, G, M, P, D, N, n]),
+    "Durga": Raga([S, R, M, P, D]),
+    "Jaunpuri": Raga([S, R, g, M, P, d, n]),
+    "Jog": Raga([S, G, g, M, P, n]),
+    "Kafi": Raga([S, R, g, M, P, D, n]),
+    "Patdeep": Raga([S, R, g, M, P, D, N]),
+    "Pilu": Raga([S, R, r, G, g, M, m, P, D, d, N, n]),
+    "Todi": Raga([S, r, g, m, P, d, N]),
+    "Yaman": Raga([S, R, G, m, P, D, N])
 }
 
 talas = {
@@ -237,7 +237,7 @@ def beatToTex(beat, raga, inCompositionMode):
                 t = r"\mathrm{" + t + "}"
             if not beat.isCopied and symbolIsNote:
                 for note in notes:
-                    if not raga.contains(note):
+                    if not raga.isAllowed(note):
                         t = "\color{red}" + t + "\color{black}"
                         break
             t = re.sub(r"@", r"", t) # remove special char again
