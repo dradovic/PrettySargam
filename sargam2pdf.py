@@ -60,6 +60,7 @@ ragas = {
     "Bhupali": Raga([S, R, G, P, D]),
     "Bihag": Raga([S, R, G, M, m, P, D, N]),
     "Brindabani Sarang": Raga([S, R, M, P, N, n]),
+    "Darbari": Raga([S, R, g, M, P, d, n]),
     "Desh": Raga([S, R, G, M, P, D, N, n]),
     "Durga": Raga([S, R, M, P, D]),
     "Jaunpuri": Raga([S, R, g, M, P, d, n]),
