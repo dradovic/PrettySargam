@@ -94,7 +94,7 @@ talas = {
 
     }
 
-DEV_MODE = sys.platform == "win32"
+DEV_MODE = False # sys.platform == "win32"
 
 def showErrorAndQuit(msg):
     messagebox.showerror("Error", msg)
