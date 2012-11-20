@@ -17,13 +17,13 @@ import os
 import re
 import string
 import sys 
-import tkFileDialog
-import tkMessageBox
-import Tkinter
+from tkinter import filedialog
+from tkinter import messagebox
+import tkinter
 import time
 import subprocess, os
 
-print sys.argv
+print(sys.argv)
 
 class Note:
     def __init__(self, symbol):
@@ -97,7 +97,7 @@ talas = {
 DEV_MODE = sys.platform == "win32"
 
 def showErrorAndQuit(msg):
-    tkMessageBox.showerror("Error", msg)
+    messagebox.showerror("Error", msg)
     sys.exit(1)
 
 class Cycle:
@@ -195,7 +195,7 @@ def symbolsAreEnclosedInParentheses(symbols):
 def beatToTex(beat, raga, inCompositionMode):
     text = ""
     if beat.text != None and beat.isPolyrythm():
-        print "Polyrythm: " + beat.text
+        print("Polyrythm: " + beat.text)
         delimiter = " "
         if inCompositionMode:
             delimiter = " \hfill "
@@ -204,7 +204,7 @@ def beatToTex(beat, raga, inCompositionMode):
         multiplier = m.groups()[0]
         subBeats = m.groups()[1]
         for subBeat in parseBeats(subBeats):
-            print "Subbeat: " + subBeat.text
+            print("Subbeat: " + subBeat.text)
             tex = tex + delimiter + beatToTex(subBeat, raga, inCompositionMode).strip("$")
         if inCompositionMode:
             tex = tex + delimiter
@@ -218,7 +218,7 @@ def beatToTex(beat, raga, inCompositionMode):
         assert len(symbols) > 0
         noteCount = 0
         for symbol in symbols:
-            print "symbol: " + symbol
+            print("symbol: " + symbol)
             notes = re.findall(NOTE_PATTERN, symbol) # decompose symbol in its notes (= grace notes + main note)
             symbolIsNote = len(notes) > 0
             if symbolIsNote or symbol == "-" or symbol == ";":
@@ -330,19 +330,19 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
 
     # initialize tala
     talaName = lines[currentLine][len("Tala:"):-1].strip()
-    print "Tala: '{0}'".format(talaName)
+    print("Tala: '{0}'".format(talaName))
     currentLine = currentLine + 1
 
     if len(lines) < currentLine + 1 or not lines[currentLine].startswith("Laya:"):
         showErrorAndQuit("Laya is not defined.")
     layaText = lines[currentLine][len("Laya:"):-1].strip()
     layaName = re.match(r"(\w+)", layaText).groups()[0]
-    print "Laya: '{0}'".format(layaName)
+    print("Laya: '{0}'".format(layaName))
     currentLine = currentLine + 1
 
-    if not talas.has_key(talaName):
+    if not talaName in talas:
         showErrorAndQuit("Tala '{0}' is not defined.".format(talaName))
-    if not talas[talaName].has_key(layaName):
+    if not layaName in talas[talaName]:
         showErrorAndQuit("Laya '{0}' is not defined for tala '{1}'.".format(layaName, talaName))
     tala = talas[talaName][layaName]
     
@@ -412,7 +412,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
     lastLineWasIncomplete = False
     cycles = []
     for line in lines[currentLine:len(lines)]:
-        print "line: " + line
+        print("line: " + line)
         
         if lineIsPagebreak(line) or lineStartsComposition(line):
             break
@@ -427,7 +427,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         elif lineContainsNotes(line):
             m = 0
             for measureStr in line.split("/"):
-                print "measure: '" + measureStr + "'"
+                print("measure: '" + measureStr + "'")
                 measure = Measure()
                 measure.beats = parseBeats(measureStr)
                 contentIsRightAligned = len(measureStr.lstrip()) < len(measureStr.rstrip())
@@ -445,11 +445,11 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
 
     # print cycles
     for cycle in cycles:
-        print "cycle:"
+        print("cycle:")
         for measure in cycle.measures:
-            print "\tmeasure:"
+            print("\tmeasure:")
             for beat in measure.beats:
-               print "\t\tbeat: " + beat.text
+               print("\t\tbeat: " + beat.text)
 
     # transform cycles into beat sequence
     captions = {} # beat index -> text
@@ -479,11 +479,11 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
                     if not lookForAntara and sthaiStart < 0:
                         sthaiStart = len(beats) - 1
                         captions[(sthaiStart / beatsPerLine) * beatsPerLine] = "Sthai"
-                        print "Sthai starts at: {0}".format(sthaiStart)
+                        print("Sthai starts at: {0}".format(sthaiStart))
                     elif lookForAntara and antaraStart < 0:
                         antaraStart = len(beats) - 1
                         captions[(antaraStart / beatsPerLine) * beatsPerLine] = "Antara"
-                        print "Antara starts at: {0}".format(antaraStart)
+                        print("Antara starts at: {0}".format(antaraStart))
             m = m + 1
         if len(cycle.measures) == 0: # was an empty line or caption
             lookForAntara = True
@@ -496,13 +496,13 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         if cycle.caption:            
             captions[len(beats)] = cycle.caption
 
-    print "beats:"
+    print("beats:")
     b = 0
     for beat in beats:
-        print "{0}: {1}".format(b, beat.text)
+        print("{0}: {1}".format(b, beat.text))
         b = b + 1
         if b % beatsPerLine == 0:
-            print "---------------------"
+            print("---------------------")
 
     # replicate back-references in beat sequence
     for b in range(1, len(beats)):
@@ -519,10 +519,10 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         # of the Sthai and not to re-copy the Sthai (if it was copied).
         cycleOffset = ((replacements / beatsPerLine) * beatsPerLine)
         while (True):
-            i = ((beatIndex - startBeat) % beatsPerLine) + startBeat + cycleOffset
+            i = int(((beatIndex - startBeat) % beatsPerLine) + startBeat + cycleOffset)
             if i >= len(beats): # there is no further relevant cycle
                 # in this case, we will start from scratch again
-                i = ((beatIndex - startBeat) % beatsPerLine) + startBeat
+                i = int(((beatIndex - startBeat) % beatsPerLine) + startBeat)
             referencedBeat = beats[i]
             if not referencedBeat.isCopied:
                 break
@@ -564,15 +564,15 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
 
     
     # write texFile
-    print "Captions:"
-    print captions
+    print("Captions:")
+    print(captions)
 
     b = 0
     while b < len(beats):
         beat = beats[b]
-        if captions.has_key(b):
+        if b in captions:
             # write caption
-            print "Writing caption: " + captions[b]
+            print("Writing caption: " + captions[b])
             texFile.write(r"\multicolumn{%d" % beatsPerLine + r"}{l}{\small " + captions[b] + r"} \\*" + os.linesep)
 
         tex = beatToTex(beat, raga, True)
@@ -601,7 +601,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
                 return False # there are no Tanas
             currentLine = b / beatsPerLine
             # if we have past the 3rd caption, we are writing Tanas
-            return currentLine > sorted(captions.iterkeys())[2] / beatsPerLine
+            return currentLine > sorted(captions.keys())[2] / beatsPerLine
 
         if nextBeatIndex % beatsPerLine == 0:
             currentLineEndsWithBackreference = beat.isCopied
@@ -609,7 +609,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
             lineTerminatesCurrentTana = currentLineEndsWithBackreference or nextLineStartsWithBackreference
             extraRowSpace = "[4pt]"
             preventPageBreaking = "*"
-            if captions.has_key(nextBeatIndex): # next line is a caption
+            if nextBeatIndex in captions: # next line is a caption
                 extraRowSpace = "[10pt]"
                 preventPageBreaking = ""
             elif lineTerminatesCurrentTana and writingTanas() and not nextLineContainsOnlyBackreferences():
@@ -693,13 +693,13 @@ def processFile(txtFilename):
         if lines[currentLine].startswith("Raga:"):
             previousRaga = raga
             ragaName = lines[currentLine][len("Raga:"):-1].strip()
-            print "Raga: '{0}'".format(ragaName)
+            print("Raga: '{0}'".format(ragaName))
             currentLine = currentLine + 1
             if currentLine >= len(lines):
                 break # file is processed
             
             # initialize raga
-            if not ragas.has_key(ragaName):
+            if not ragaName in ragas:
                 showErrorAndQuit("Raga '{0}' is not defined.".format(ragaName))
             raga = ragas[ragaName]
         elif raga == None:
@@ -707,10 +707,10 @@ def processFile(txtFilename):
         assert raga != None
 
         if not lineStartsComposition(lines[currentLine]):
-            print "Entering Snippet mode"
+            print("Entering Snippet mode")
             currentLine = processSnippets(lines, currentLine, raga, ragaName, texFile)
         else:
-            print "Entering Composition mode"
+            print("Entering Composition mode")
             writeRagaNameInTitle = previousRaga != raga and isNewPage
             currentLine = processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNameInTitle)
             
@@ -774,7 +774,7 @@ except IOError as e:
    pass
 
 # don't show Tk's root window (see: http://www.ferg.org/thinking_in_tkinter/index.html)
-root = Tkinter.Tk()
+root = tkinter.Tk()
 root.withdraw()
 
 # the following hack is from http://stackoverflow.com/questions/3375227/how-to-give-tkinter-file-dialog-focus
@@ -791,7 +791,7 @@ root.focus_force()
 initialDir = None
 if lastOpenedFile != None:
     initialDir = os.path.dirname(lastOpenedFile)[0]
-filenames = tkFileDialog.askopenfilename(parent=root, initialfile=lastOpenedFile, # ignored on Mac (see: http://tkinter.unpythonic.net/wiki/tkFileDialog)
+filenames = filedialog.askopenfilename(parent=root, initialfile=lastOpenedFile, # ignored on Mac (see: http://tkinter.unpythonic.net/wiki/tkFileDialog)
                                          initialdir=initialDir, # on Mac the General Controls control panel allows the end user to override the application default directory (see: http://tkinter.unpythonic.net/wiki/tkFileDialog)
                                          multiple=True, # on Mac only available when Navigation Services are installed (see: http://tkinter.unpythonic.net/wiki/tkFileDialog)
                                          filetypes=[('text files', '.txt')])
@@ -806,10 +806,10 @@ try:
    tmpFile.write(txtFilenames[0])
    tmpFile.close()
 except IOError as e:
-   print "Warning: could not store settings."
+   print("Warning: could not store settings.")
 
 for txtFilename in txtFilenames:
-    print txtFilename
+    print(txtFilename)
     processFile(txtFilename)
     
 
