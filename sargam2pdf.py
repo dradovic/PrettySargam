@@ -478,11 +478,11 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
                 if beat.text != None:
                     if not lookForAntara and sthaiStart < 0:
                         sthaiStart = len(beats) - 1
-                        captions[(sthaiStart / beatsPerLine) * beatsPerLine] = "Sthai"
+                        captions[(sthaiStart // beatsPerLine) * beatsPerLine] = "Sthai"
                         print("Sthai starts at: {0}".format(sthaiStart))
                     elif lookForAntara and antaraStart < 0:
                         antaraStart = len(beats) - 1
-                        captions[(antaraStart / beatsPerLine) * beatsPerLine] = "Antara"
+                        captions[(antaraStart // beatsPerLine) * beatsPerLine] = "Antara"
                         print("Antara starts at: {0}".format(antaraStart))
             m = m + 1
         if len(cycle.measures) == 0: # was an empty line or caption
@@ -517,7 +517,7 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         # itself. For example: if someone references the Sthai for more
         # than one cycle, we have to make sure to continue with the outro
         # of the Sthai and not to re-copy the Sthai (if it was copied).
-        cycleOffset = ((replacements / beatsPerLine) * beatsPerLine)
+        cycleOffset = ((replacements // beatsPerLine) * beatsPerLine)
         while (True):
             i = int(((beatIndex - startBeat) % beatsPerLine) + startBeat + cycleOffset)
             if i >= len(beats): # there is no further relevant cycle
@@ -599,9 +599,9 @@ def processComposition(lines, currentLine, raga, ragaName, texFile, writeRagaNam
         def writingTanas():
             if len(captions) <= 2:
                 return False # there are no Tanas
-            currentLine = b / beatsPerLine
+            currentLine = b // beatsPerLine
             # if we have past the 3rd caption, we are writing Tanas
-            return currentLine > sorted(captions.keys())[2] / beatsPerLine
+            return currentLine > sorted(captions.keys())[2] // beatsPerLine
 
         if nextBeatIndex % beatsPerLine == 0:
             currentLineEndsWithBackreference = beat.isCopied
