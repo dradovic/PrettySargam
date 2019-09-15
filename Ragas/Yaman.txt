@@ -1,0 +1,40 @@
+Raga: Yaman
+
+Yaman (also known as Emaan in West Asia and Kalyani in Carnatic classical music) is a heptatonic (Sampurna) Hindustani Classical raga of Kalyan Thaat.
+
+Yaman is supposed to be one of the most fundamental ragas in Hindustani Classical Music. It is usually one of the first ragas taught to the serious classical music student.
+
+In Alap, we usually play `N. D. S` to arrive to Sa instead of `N. S` and analogously `m G P` instead of `m P`.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2} % increase row height
+\begin{tabular}{|l|l|}
+\hline
+Vadi & Ga \\
+Samvadi & Ni \\
+Time & Early Night \\
+Aroha & `N. R G m P m D N S'` \\
+Avroha & `S' N D P m G [m]R S` \\
+\hline
+\end{tabular}
+\end{center}
+
+\pagebreak
+
+Tala: Teental
+Laya: Madhya (120 - 160 bpm)
+               /            Gm   DN / S'   -N   P   - / -  [m]R  -    S,
+G    R   G  -  / -     -    >sth    /                 /
+G    R   m  G  / >sth               /                 /
+               / >sth >sth  m    P  / G    m    G   m / P  D  [P]m P
+mN   DN  P  P  /  R    -    S    S  / >sth            /
+
+               /            ;    ;  / P     P    S'  - / S' -  S'   S'
+S'N' R'S' N  D / N     D    P    P  / >ant             /
+               /            P    P   / [P]G' R'   S'  N / D  P  m    G
+R    -    Gm P / [m]R    -    S    S
+
+Sthai Tanas
+                /                    / >sth               /
+N.R Gm  G,R Gm  / Pm,  Gm  DN  D,m   / DN  S'N  >sth      /
+
